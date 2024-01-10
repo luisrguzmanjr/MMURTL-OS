@@ -2225,11 +2225,11 @@ else
 ********************************************************************/
 
 static U32 GetDirEnt(U8  *pName,
-              U8  Drive,
-              U16 Clstr,
-              U32 *pLBARet,
-              U32 *poEntRet,
-              U8  **pEntRet)
+					U8  Drive,
+					U16 Clstr,
+					U32 *pLBARet,
+					U32 *poEntRet,
+					U8  **pEntRet)
 {
 unsigned long sector, i, j, k, erc;
 U8 fFound, fEnd, *pEnt, *pStart;
@@ -2303,12 +2303,12 @@ U16 MaxClstr;
 /* FAT32 Version */
 
 static U32 GetDirEnt32(U8  *pName,
-              U8  Drive,
-              U32 Clstr32,
-              U32 *pLBARet,
-              U32 *poEntRet,
-              U8  **pEntRet)
-{
+					  U8  Drive,
+					  U32 Clstr32,
+					  U32 *pLBARet,
+					  U32 *poEntRet,
+					  U8  **pEntRet)
+		{
 U32 sector, i, j, k, erc;
 U8 fFound, fEnd, *pEnt, *pStart;
 U32 MaxClstr;
@@ -2386,11 +2386,11 @@ U32 MaxClstr;
 *****************************************************/
 
 static U32 GetRootEnt(U8  *pName,
-               U8  Drive,
-               U32 *pLBARet,
-               U32 *poEntRet,
-               U8  **pEntRet)
-{
+					 U8  Drive,
+					 U32 *pLBARet,
+					 U32 *poEntRet,
+					 U8  **pEntRet)
+		{
 unsigned long i, j, k, erc;
 U8 fFound, fEnd, *pEnt, *pStart;
 
@@ -2450,10 +2450,10 @@ RAB -  This builds a full file specification from
 *********************************************/
 
 static void BuildSpec(char *pName,
-			   long cbName,
-			   char *pDest,
-			   long *cbDestRet,
-			   long iJob)
+					 long cbName,
+					 char *pDest,
+					 long *cbDestRet,
+					 long iJob)
 {
 long i;
 char pathtmp[70];
@@ -2568,9 +2568,9 @@ U32 cbSpec;
 				if (((c >= 'A') && (c <= 'Z')) ||
 				    ((c >= 'a') && (c <= 'z')))
 					   c &= 0xdf;
-	            FileSpec[k][j] = c;
-	            ++j;
-	        }
+				FileSpec[k][j] = c;
+				++j;
+			}
 			break;
 		}
 
@@ -2589,13 +2589,13 @@ return erc;
 ********************************************************/
 
 static U32 GetDirSectorM(char *pPath,
-				 long cbPath,
-				 char *pSectRet,
-				 long cbRetMax,
-				 long SectNum,
-				 long *LBARet,
-				 U16  *ClstrRet,
-				 long iJob)
+						long cbPath,
+						char *pSectRet,
+						long cbRetMax,
+						long SectNum,
+						long *LBARet,
+						U16  *ClstrRet,
+						long iJob)
 {
 U32 sector, i, j, k, erc, spc, level, iSect;
 U16 MaxClstr, Clstr, rClstr;
@@ -2764,13 +2764,13 @@ return (erc);
 /* FAT32 Version */
 
 static U32 GetDirSectorM32(char *pPath,
-				 long cbPath,
-				 char *pSectRet,
-				 long cbRetMax,
-				 long SectNum,
-				 long *LBARet,
-				 U32  *ClstrRet,
-				 long iJob)
+						  long cbPath,
+						  char *pSectRet,
+						  long cbRetMax,
+						  long SectNum,
+						  long *LBARet,
+						  U32  *ClstrRet,
+						  long iJob)
 {
 U32 sector, i, j, k, erc, spc, level, iSect;
 U32 MaxClstr, Clstr, rClstr;
@@ -2944,11 +2944,11 @@ return (erc);
 ********************************************************/
 
 static U32 ReadBlockM(U32 dHandle,
-               U8  *pBytesRet,
-               U32 nBytes,
-               U32 dLFA,
-               U32 *pdBytesRet,
-               U8  fFill)			/* TRUE if filling a stream buffer */
+					 U8  *pBytesRet,
+					 U32 nBytes,
+					 U32 dLFA,
+					 U32 *pdBytesRet,
+					 U8  fFill)			/* TRUE if filling a stream buffer */
 {
 U32 erc, j, LBA, iFCB, bpc, spc, nDone, rLFA, nLeft, nBlks;
 U16 Clstr, /*MaxClstr,*/ ClstrSav;
