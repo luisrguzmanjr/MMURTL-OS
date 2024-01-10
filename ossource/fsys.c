@@ -721,10 +721,10 @@ if (!erc)
 	Ldrv[ld].fFAT16 = 0;
 	Ldrv[ld].MaxClust = 0x00000ff8;
 
-    erc = 0;
+	erc = 0;
 }
 else
-   Ldrv[ld].DevNum = 0xff;
+	Ldrv[ld].DevNum = 0xff;
 
  return erc;
 }
@@ -864,30 +864,30 @@ for (j=2; j<nPDrvs; j++)
  	for(counter = 0; counter < 4; counter++)
  	{
 		if ((partab[counter].nSectorsTotal > 0) && validFAT(partab[counter].FATType))
-    		{
-     			Ldrv[i].LBA0 =partab[counter].nFirstSector;	/* lba for Start of LDrv (bootSect) */
-     			Ldrv[i].LBAMax =partab[counter].nSectorsTotal;	/* Max lba for logical drive */
-	 		if ((partab[counter].FATType == FAT16) || (partab[counter].FATType == FAT16B))	
+		{
+			Ldrv[i].LBA0 =partab[counter].nFirstSector;	/* lba for Start of LDrv (bootSect) */
+			Ldrv[i].LBAMax =partab[counter].nSectorsTotal;	/* Max lba for logical drive */
+			if ((partab[counter].FATType == FAT16) || (partab[counter].FATType == FAT16B))	
 			{
-        			Ldrv[i].fFAT16 = 1;
+					Ldrv[i].fFAT16 = 1;
 				Ldrv[i].MaxClust = 0x0000fff8;
 			}
-	 		else if ((partab[counter].FATType == FAT32) || (partab[counter].FATType == FAT32L))
+			else if ((partab[counter].FATType == FAT32) || (partab[counter].FATType == FAT32L))
 			{
 				Ldrv[i].fFAT16 = 2;
 				Ldrv[i].MaxClust = 0x0ffffff8;
 			}
-     			Ldrv[i].DevNum = j+10;
+				Ldrv[i].DevNum = j+10;
 			if (!fFound[counter])
 			{
 				GetBSInfo(j, counter);
 				fFound[counter]=1;
 			}
 
-       			i++;		/* if valid partition go to next LDrv */
-     		}
- 	}	
-  } 
+				i++;		/* if valid partition go to next LDrv */
+			}
+ 		}	
+	}
 }
  if (ercD[0]) 
 	return ercD[0];				/* there may be no Device 13 */
@@ -956,33 +956,33 @@ if (Ldrv[i].DevNum != 0xff)
     {
 	if(Ldrv[i].fFAT16 < 2)
 	{
-       Ldrv[i].LBARoot     = fsb->ResSectors + Ldrv[i].LBA0 +
-                            (fsb->FATs * fsb->SecPerFAT);
-       Ldrv[i].nRootDirEnt = fsb->RootDirEnts;	/* n Root dir entries */
-       Ldrv[i].SecPerClstr = fsb->SecPerClstr;
-       Ldrv[i].nHeads      = fsb->Heads;
-       Ldrv[i].nSecPerTrk  = fsb->SecPerTrack;
-       Ldrv[i].sFAT        = fsb->SecPerFAT;	/* nSectors in a FAT */
-       Ldrv[i].nFATS       = fsb->FATs;		/* number of FATs */
-       Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb->ResSectors;
-       Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb->RootDirEnts / 16);
+		Ldrv[i].LBARoot     = fsb->ResSectors + Ldrv[i].LBA0 +
+							 (fsb->FATs * fsb->SecPerFAT);
+		Ldrv[i].nRootDirEnt = fsb->RootDirEnts;	/* n Root dir entries */
+		Ldrv[i].SecPerClstr = fsb->SecPerClstr;
+		Ldrv[i].nHeads      = fsb->Heads;
+		Ldrv[i].nSecPerTrk  = fsb->SecPerTrack;
+		Ldrv[i].sFAT        = fsb->SecPerFAT;	/* nSectors in a FAT */
+		Ldrv[i].nFATS       = fsb->FATs;		/* number of FATs */
+		Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb->ResSectors;
+		Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb->RootDirEnts / 16);
 /*	   if (fsb.FileSysType[4] == '2')
          Ldrv[i].fFAT16 = 0;
 */
 	}
 	else
 	{
-       Ldrv[i].LBARoot     = fsb32->ResSectors + Ldrv[i].LBA0 +
-                            (fsb32->FATs * fsb32->SecPerFAT);
-/*       Ldrv[i].nRootDirEnt = fsb32->RootDirEnts;	** n Root dir entries */
-       Ldrv[i].nRootDirEnt = 0xFFFF;	/* FAT32 is 0 */
-       Ldrv[i].SecPerClstr = fsb32->SecPerClstr;
-       Ldrv[i].nHeads      = fsb32->Heads;
-       Ldrv[i].nSecPerTrk  = fsb32->SecPerTrack;
-       Ldrv[i].sFAT        = fsb32->SecPerFAT;	/* nSectors in a FAT */
-       Ldrv[i].nFATS       = fsb32->FATs;	/* number of FATs */
-       Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb32->ResSectors;
-       Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb32->RootDirEnts / 16);
+		Ldrv[i].LBARoot     = fsb32->ResSectors + Ldrv[i].LBA0 +
+							 (fsb32->FATs * fsb32->SecPerFAT);
+	/*       Ldrv[i].nRootDirEnt = fsb32->RootDirEnts;	** n Root dir entries */
+		Ldrv[i].nRootDirEnt = 0xFFFF;	/* FAT32 is 0 */
+		Ldrv[i].SecPerClstr = fsb32->SecPerClstr;
+		Ldrv[i].nHeads      = fsb32->Heads;
+		Ldrv[i].nSecPerTrk  = fsb32->SecPerTrack;
+		Ldrv[i].sFAT        = fsb32->SecPerFAT;	/* nSectors in a FAT */
+		Ldrv[i].nFATS       = fsb32->FATs;	/* number of FATs */
+		Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb32->ResSectors;
+		Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb32->RootDirEnts / 16);
 /*	   if (fsb.FileSysType[4] == '2')
          Ldrv[i].fFAT16 = 0;
 */
@@ -1255,7 +1255,7 @@ U16 MaxClstr;
 					{
 						iFound = j;
 						if (fLock)
-		                    Fat[j].fModLock |= FATLOCK;
+							Fat[j].fModLock |= FATLOCK;
 						break;		/* Already IN! */
 					}
 			}
@@ -1271,7 +1271,7 @@ U16 MaxClstr;
 	        Fat[j].LastUsed = Tick;		/* update LRU */
 		}
 		else
-		{       			   		/* else put into oldest buffer */
+		{								/* else put into oldest buffer */
 			j = iLRU;
 
 			/* Check to see if Fat[iLRU] is valid and has been
@@ -1279,16 +1279,16 @@ U16 MaxClstr;
 			   the next one into this buffer. This done by
 			   calling UpdateFAT(iFatRec).
 			*/
-	        if (Fat[j].fModLock & FATMOD)
-		        erc = UpdateFAT(j);
+			if (Fat[j].fModLock & FATMOD)
+				erc = UpdateFAT(j);
 
 			if (!erc)
 			{
 				erc = DeviceOp(Ldrv[Drive].DevNum, 1, i, 1, Fat[j].pBuf);
 				Fat[j].Drive = Drive;			/* Update Drive */
-	    	    Fat[j].LastUsed = Tick;			/* update LRU */
-	        	Fat[j].iClstrStart = first;		/* update first cluster num */
-		        Fat[j].LBASect = i;				/* LBA this FAt sect came from */
+				Fat[j].LastUsed = Tick;			/* update LRU */
+				Fat[j].iClstrStart = first;		/* update first cluster num */
+				Fat[j].LBASect = i;				/* LBA this FAt sect came from */
 			}
 		}
 	}
@@ -1339,7 +1339,7 @@ U16 MaxClstr;
 			   calling UpdateFAT(iFatRec).
 			*/
 			if (Fat[0].fModLock & FATMOD)
-			        erc = UpdateFAT(0);
+				erc = UpdateFAT(0);
 
 			/* set up to read upto 3 sectors into buffer */
 
@@ -1355,9 +1355,9 @@ U16 MaxClstr;
 				erc = DeviceOp(Ldrv[Drive].DevNum, 1, i, k, Fat[0].pBuf);
 
 				Fat[0].Drive = Drive;			/* Update Drive */
-		        Fat[0].LastUsed = Tick;			/* update LRU */
-	    	   	Fat[0].iClstrStart = first;		/* update first cluster num */
-		        Fat[0].LBASect = i;		/* LBA this FAT sect came from */
+				Fat[0].LastUsed = Tick;			/* update LRU */
+				Fat[0].iClstrStart = first;		/* update first cluster num */
+				Fat[0].LBASect = i;				/* LBA this FAT sect came from */
 			}
 		}
  	}
@@ -1433,7 +1433,7 @@ U32 MaxClstr;
 					{
 						iFound = j;
 						if (fLock)
-		                    Fat[j].fModLock |= FATLOCK;
+							Fat[j].fModLock |= FATLOCK;
 						break;		/* Already IN! */
 					}
 			}
@@ -1449,7 +1449,7 @@ U32 MaxClstr;
 	        Fat[j].LastUsed = Tick;		/* update LRU */
 		}
 		else
-		{       			   		/* else put into oldest buffer */
+		{								/* else put into oldest buffer */
 			j = iLRU;
 
 			/* Check to see if Fat[iLRU] is valid and has been
@@ -1464,9 +1464,9 @@ U32 MaxClstr;
 			{
 				erc = DeviceOp(Ldrv[Drive].DevNum, 1, i, 1, Fat[j].pBuf);
 				Fat[j].Drive = Drive;		/* Update Drive */
-	    	    		Fat[j].LastUsed = Tick;		/* update LRU */
-	        		Fat[j].iClstrStart = first;	/* update first cluster num*/
-		        	Fat[j].LBASect = i;		/* LBA this FAt sect came from */
+				Fat[j].LastUsed = Tick;		/* update LRU */
+				Fat[j].iClstrStart = first;	/* update first cluster num*/
+				Fat[j].LBASect = i;			/* LBA this FAt sect came from */
 			}
 		}
  	}
@@ -1531,7 +1531,7 @@ U16 ClstrVal, *pClstr;
 /* FAT32 Version */
 
 static U32 GetClstrValue32(U32 Clstr32, U8 Drive, U8 fLock,
-                         U32 *pValRet, U32 *iFatBufRet)
+						  U32 *pValRet, U32 *iFatBufRet)
 {
 U32 erc, oClstr, iFat;
 U32 ClstrVal, *pClstr;
@@ -1603,7 +1603,7 @@ U16 ClstrVal, *pClstr, ClstrSave;
 		pClstr += oClstr + (oClstr/2);	/* 1.5 bytes in */
 		ClstrSave = *pClstr;		/* We have 16 bits */
 		if (Clstr & 1) 
-		{        	   		/* Odd, must shift */
+		{							/* Odd, must shift */
 			NewClstrVal <<= 4;
 			NewClstrVal &= 0xfff0;
 			ClstrVal = (ClstrSave & 0x0F) | NewClstrVal;
@@ -1729,8 +1729,8 @@ U8 fFound;
 
 	if (ClstrValue < MaxClstr) 
 	{		/* no need to extend it */
-    	*pNextClstrRet = ClstrValue;
-        Fat[i].fModLock &= ~FATLOCK;	/* unlock it */
+		*pNextClstrRet = ClstrValue;
+		Fat[i].fModLock &= ~FATLOCK;	/* unlock it */
 		return(0);
 	}
 
@@ -1748,7 +1748,7 @@ U8 fFound;
 		if (erc) 
 		{
 			*pNextClstrRet = 0;
-	        Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
+			Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
 			return(erc);
 		}
 		if (!ClstrValue) 
@@ -1766,10 +1766,10 @@ U8 fFound;
 		if (erc) 
 		{
 			*pNextClstrRet = 0;
-	        Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
+			Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
 			return(erc);
 		}
-        Fat[k].fModLock &= ~FATLOCK;		/* unlock it */
+		Fat[k].fModLock &= ~FATLOCK;		/* unlock it */
 
 		/* Set the newcluster to "end Cluster" chain value */
 
@@ -1800,8 +1800,8 @@ U8 fFound;
 
 	if (ClstrValue < MaxClstr) 
 	{		/* no need to extend it */
-    	*pNextClstrRet = ClstrValue;
-        Fat[i].fModLock &= ~FATLOCK;	/* unlock it */
+		*pNextClstrRet = ClstrValue;
+		Fat[i].fModLock &= ~FATLOCK;	/* unlock it */
 		return(0);
 	}
 
@@ -1819,7 +1819,7 @@ U8 fFound;
 		if (erc) 
 		{
 			*pNextClstrRet = 0;
-	        Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
+			Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
 			return(erc);
 		}
 		if (!ClstrValue) 
@@ -1837,7 +1837,7 @@ U8 fFound;
 		if (erc) 
 		{
 			*pNextClstrRet = 0;
-	        Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
+			Fat[i].fModLock &= ~FATLOCK;	/* unlock previous lastclstr */
 			return(erc);
 		}
         Fat[k].fModLock &= ~FATLOCK;		/* unlock it */
@@ -1969,7 +1969,7 @@ U8 Drive;
   iFCB = paFUB[dHandle]->iFCB;
   Drive = paFCB[iFCB]->Ldrv;		/* What logical drive are we on? */
   spc = Ldrv[Drive].SecPerClstr;	/* sectors per cluster */
-  bpc = spc * 512;			/* bytes per cluster */
+  bpc = spc * 512;					/* bytes per cluster */
 
  if (Ldrv[Drive].fFAT16)
  	MaxClstr = 0xfff8;
@@ -4435,8 +4435,8 @@ while (1)
 			i = 4;
 			while (i<nFUBs)
 			{
-	            if (paFUB[i]->Job == pRQB->dData0)
-	            {
+				if (paFUB[i]->Job == pRQB->dData0)
+				{
 					CloseFileM(i);
 				}
 				++i;	/* next FUB */
@@ -4446,41 +4446,41 @@ while (1)
 			break;
 		case 1 :		/* OpenFile */
 			erc = OpenFileM(pRQB->pData1,	    	/* pFilename */
-			                pRQB->cbData1,      	/* dcbFilename */
-					pRQB->dData0,       	/* Mode */
-					pRQB->dData1,       	/* Type */
-					pRQB->pData2,       	/* pdHandleRet */
-					pRQB->RqOwnerJob);	/* iJob Owner */
+							pRQB->cbData1,      	/* dcbFilename */
+							pRQB->dData0,			/* Mode */
+							pRQB->dData1,			/* Type */
+							pRQB->pData2,			/* pdHandleRet */
+							pRQB->RqOwnerJob);	/* iJob Owner */
 			break;
 		case 2 :		/* CloseFile */
 			erc = CloseFileM(pRQB->dData0);	    	/* Handle */
 			break;
 		case 3 :		/* ReadBlock */
-			erc = ReadBlockM(pRQB->dData0,       	/* Handle */
-			                 pRQB->pData1,       	/* pDataRet */
+			erc = ReadBlockM(pRQB->dData0,			/* Handle */
+			                 pRQB->pData1,			/* pDataRet */
 			                 pRQB->cbData1,      	/* nByes */
-					 pRQB->dData1,      	/* dLFA */
-					 pRQB->pData2,      	/* pdnBytesRet */
-					 0);                	/* NOT internal */
+					 		 pRQB->dData1,      	/* dLFA */
+					 		 pRQB->pData2,      	/* pdnBytesRet */
+					 		 0);         			/* NOT internal */
 			break;
 		case 4 :		/* WriteBlock */
 			erc = WriteBlockM(pRQB->dData0,      	/* Handle */
 			                  pRQB->pData1,      	/* pData */
 			                  pRQB->cbData1,     	/* nBytes */
-					  pRQB->dData1,      	/* dLFA */
-					  pRQB->pData2);	/* pdBytesRet */
+					  		  pRQB->dData1,      	/* dLFA */
+					  		  pRQB->pData2);		/* pdBytesRet */
 			break;
 		case 5 :		/* ReadBytes */
-			erc = ReadBytesM(pRQB->dData0,       	/* Handle */
-			                 pRQB->pData1,       	/* pDataRet */
+			erc = ReadBytesM(pRQB->dData0,			/* Handle */
+			                 pRQB->pData1,			/* pDataRet */
 			                 pRQB->cbData1,      	/* nBytes */
-					 pRQB->pData2);      	/* pdnBytesRet */
+					 		 pRQB->pData2);      	/* pdnBytesRet */
 			break;
 		case 6 :		/* WriteBytes */
 			erc = WriteBytesM(pRQB->dData0,      	/* Handle */
 			                  pRQB->pData1,      	/* pData */
 			                  pRQB->cbData1,     	/* nBytes */
-					  pRQB->pData2);     	/* pdnBytesRet */
+					  		  pRQB->pData2);     	/* pdnBytesRet */
 			break;
 		case 7 :		/* GetFileLFA */
 			erc = GetFileLFAM(pRQB->dData0,      	/* Handle */
@@ -4488,11 +4488,11 @@ while (1)
 			break;
 		case 8 :		/* SetFileLFA */
 			erc = SetFileLFAM(pRQB->dData0,      	/* Handle */
-			                 pRQB->dData1);     	/* dNewLFA */
+			                  pRQB->dData1);     	/* dNewLFA */
 			break;
 		case 9 :		/* GetFileSize */
 			erc = GetFileSizeM(pRQB->dData0,     	/* Handle */
-			                  pRQB->pData1);    	/* pdSizeRet */
+			                   pRQB->pData1);    	/* pdSizeRet */
 			break;
 		case 10 :		/* SetFileSize */
 			erc = SetFileSizeM(pRQB->dData0,     	/* Handle */
@@ -4534,7 +4534,7 @@ while (1)
 		case 16 :		/* GetDirSector */
 			erc = GetDirSectorM(pRQB->pData1,      	/* pPath    */
 			                    pRQB->cbData1,     	/* cbPath   */
-					    pRQB->pData2,      	/* pSectRet */
+					    		pRQB->pData2,      	/* pSectRet */
 			                    pRQB->cbData2,     	/* cbRetMax */
 			                    pRQB->dData0,      	/* SectNum */
 			                    &i,		   	/* for LBARet */

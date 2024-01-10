@@ -212,7 +212,7 @@ unsigned long width, value, i, total;
 		if(chr == '%') 
 		{					/* format code */
 			chr = *fmt++;
-            ptr = &numstk[32];
+			ptr = &numstk[32];
 			*ptr = justify = minus = 0;
 			width = value = i = 0;
 			zero = ' ';
@@ -366,10 +366,10 @@ long xsprintf(char *s, char *fmt, ...)
 
 void CheckScreen()
 {
-        long iCol, iLine;
+	long iCol, iLine;
 
 	GetXY(&iCol, &iLine);
-    if (iLine >= 23)
+	if (iLine >= 23)
 	{
 		ScrollVid(0,1,80,23,1);
 		xsprintf(&rgStatLine[70], "%d", tick);
@@ -388,8 +388,8 @@ void CheckScreen()
 static void InitScreen(void)
 {
 	ClrScr();
-    xsprintf(&rgStatLine[70], "%d", tick);
-    PutVidChars(0,0, rgStatLine, 80, WHITE|BGBLUE);
+	xsprintf(&rgStatLine[70], "%d", tick);
+	PutVidChars(0,0, rgStatLine, 80, WHITE|BGBLUE);
 	PutVidChars(0,  24, rgMonMenu1, 26, BLUE|BGWHITE);
 	PutVidChars(27, 24, rgMonMenu2, 26, BLUE|BGWHITE);
 	PutVidChars(54, 24, rgMonMenu3, 25, BLUE|BGWHITE);
@@ -541,7 +541,7 @@ for(;;)
 		if ((gcode & 0xff) == 0x0C)
 		{
 			/*  Find next valid Job that is NOT the
-		    	debugger and assign Vid and Keyboard to
+				debugger and assign Vid and Keyboard to
 				it.
 			*/
 
@@ -605,10 +605,10 @@ static void Reboot(void)
 {
 ;
 #asm
-		CLI                     ;first we clear interrupts
-		MOV ECX, 0FFFFh	        ;check port up to 64K times
+		CLI						;first we clear interrupts
+		MOV ECX, 0FFFFh			;check port up to 64K times
 Reboot0:
-		IN AL,64h		        ;Read Status Byte into AL
+		IN AL,64h				;Read Status Byte into AL
 		TEST AL,02h				;Test The Input Buffer Full Bit
 		LOOPNZ Reboot0
 		MOV AL,0FEh				;Strobe bit 0 of keyboard crtlr output
@@ -662,10 +662,10 @@ char fdone, fcli;
 
 				cbrunfile = 0;
 				while ((arunfile[cbrunfile] != 0x0A) &&
-                       (arunfile[cbrunfile] != 0x0D) &&
-                       (arunfile[cbrunfile] != 0x20) &&
-                       (arunfile[cbrunfile] != 0x09) &&
-                       (arunfile[cbrunfile]))
+					   (arunfile[cbrunfile] != 0x0D) &&
+					   (arunfile[cbrunfile] != 0x20) &&
+					  (arunfile[cbrunfile] != 0x09) &&
+					  (arunfile[cbrunfile]))
 					cbrunfile++;
 
 				if (cbrunfile > 2)
@@ -906,17 +906,17 @@ for (;;)  /* Loop forEVER looking for user desires */
 			{ /* ReadKbd no wait until no error */
 				SetXY(0,1);
 				erc = QueryPages(&nMemPages);
-                xprintf("Any key to dismiss status... \r\n");
-                xprintf("Free 4K memory pages:      %d\r\n", nMemPages);
-                xprintf("Task switches total:       %d\r\n", nSwitches);
-                xprintf("Preemptive task switches:  %d\r\n", nSlices);
-                xprintf("CPU idle ticks (no work):  %d\r\n", nHalts);
-                xprintf("Tasks Ready to Run:        %d\r\n", nReady);
-                xprintf("Free Task State Segments:  %d\r\n", nTSSLeft);
-                xprintf("Free Job Control Blocks:   %d\r\n", nJCBLeft);
-                xprintf("Free Request Blocks:       %d\r\n", nRQBLeft);
-                xprintf("Free Link Blocks:          %d\r\n", nLBLeft);
-                xprintf("Free Exchanges:            %d\r\n", nEXCHLeft);
+				xprintf("Any key to dismiss status... \r\n");
+				xprintf("Free 4K memory pages:      %d\r\n", nMemPages);
+				xprintf("Task switches total:       %d\r\n", nSwitches);
+				xprintf("Preemptive task switches:  %d\r\n", nSlices);
+				xprintf("CPU idle ticks (no work):  %d\r\n", nHalts);
+				xprintf("Tasks Ready to Run:        %d\r\n", nReady);
+				xprintf("Free Task State Segments:  %d\r\n", nTSSLeft);
+				xprintf("Free Job Control Blocks:   %d\r\n", nJCBLeft);
+				xprintf("Free Request Blocks:       %d\r\n", nRQBLeft);
+				xprintf("Free Link Blocks:          %d\r\n", nLBLeft);
+				xprintf("Free Exchanges:            %d\r\n", nEXCHLeft);
 				SetXY(0,1);
 				PutVidChars(29, 1, "|",  1, GREEN|BGBLACK); Sleep(9);
 				PutVidChars(29, 1, "/",  1, GREEN|BGBLACK); Sleep(9);
@@ -929,7 +929,7 @@ for (;;)  /* Loop forEVER looking for user desires */
 				PutVidChars(29, 1, " ",  1, GREEN|BGBLACK);
 			}
 			SetXY(0,12);
-            xprintf ("\r\n");
+			xprintf ("\r\n");
 			break;
 	case 0x16:		/* F8 Reboot */
 			xprintf("\r\nF8 again to reboot, any other key to cancel");
@@ -947,18 +947,18 @@ for (;;)  /* Loop forEVER looking for user desires */
 	case 0x12:		/* F4 - future use */
 			InitScreen();
 			Color = YELLOW|BGBLACK;
-            xprintf("Juju (tm) - wants to know what you want with her computer!\r\n");
-            xprintf("Copyright (c) L.R.Guzman, 2011-present ALL RIGHTS RESERVED\r\n\r\n");
+			xprintf("Juju (tm) - wants to know what you want with her computer!\r\n");
+			xprintf("Copyright (c) L.R.Guzman, 2011-present ALL RIGHTS RESERVED\r\n\r\n");
 			Color = WHITE|BGBLACK;
-            c = ((BootDrive & 0x7f) + 0x41);
-            xprintf("BootDrive: %c\r\n", c);
-            i = (oMemMax+1)/1024;
-            xprintf("Total memory (Kb): %d\r\n", i);
-            erc = QueryPages(&nMemPages);
-            i = (nMemPages*4096)/1024;
-            xprintf("Free memory  (Kb): %d\r\n", i);
-            break;
-    case 0x13:      /* F5  */
+			c = ((BootDrive & 0x7f) + 0x41);
+			xprintf("BootDrive: %c\r\n", c);
+			i = (oMemMax+1)/1024;
+			xprintf("Total memory (Kb): %d\r\n", i);
+			erc = QueryPages(&nMemPages);
+			i = (nMemPages*4096)/1024;
+			xprintf("Free memory  (Kb): %d\r\n", i);
+			break;
+	case 0x13:		/* F5  */
 	case 0x14:		/* F6  */
 	case 0x15:		/* F7  */
 	case 0x17:		/* F9  */
@@ -968,14 +968,14 @@ for (;;)  /* Loop forEVER looking for user desires */
 	default:
 		if (((c > 0x1F) && (c < 0x80)) ||
 			(c==0x0D) || (c==8))
-			{
-				if (c==0x0D)
-					TTYOut (CRLF, 2, WHITE|BGBLACK);
-				else
-					TTYOut (&c, 1, WHITE|BGBLACK);
-                }
+		{
+			if (c==0x0D)
+				TTYOut (CRLF, 2, WHITE|BGBLACK);
+			else
+				TTYOut (&c, 1, WHITE|BGBLACK);
+		}
 	}
-    CheckScreen();
+	CheckScreen();
 } /* for EVER */
 
 }
