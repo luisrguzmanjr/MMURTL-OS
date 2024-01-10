@@ -155,7 +155,7 @@ extern far long GetNormVid(long *pNormVidRet);
 
 /* From MDevDrv */
 extern far U32  DeviceOp(U32  dDevice,
- 		        U32  dOpNum,
+			U32  dOpNum,
 			U32  dLBA,
 			U32  dnBlocks,
 			U8  *pData);
@@ -190,17 +190,17 @@ extern long xprintf(char *fmt, ...);
 
 #define ErcBadFileSpec	 200	/* invalid file spec (not correct format)*/
 #define ErcNoSuchDrive	 201	/* Try another letter bozo */
-#define ErcNotAFile	 202	/* Open a directory?? NOT */
+#define ErcNotAFile		 202	/* Open a directory?? NOT */
 #define ErcNoSuchFile	 203	/* No can do! It ain't there...*/
 #define ErcNoSuchDir	 204	/* Ain't no such dir... */
-#define ErcReadOnly	 205	/* You can't modify it bubba */
+#define ErcReadOnly		 205	/* You can't modify it bubba */
 #define ErcNoFreeFCB	 206	/* We're really hurtin... */
 #define ErcBadOpenMode	 207	/* Say what? Mode??? */
 #define ErcFileInUse	 208	/* File is open in an incompatible mode */
 #define ErcNoFreeFUB	 209	/* Sorry, out of File User Blocks */
 #define ErcBadFileHandle 210	/* WHOAAA, bad handle buddy! */
 #define ErcBrokenFile	 211	/* Cluster chain broken on file */
-#define ErcBadFCB	 213	/* We got REAL problems... */
+#define ErcBadFCB		 213	/* We got REAL problems... */
 #define ErcStreamFile	 214	/* Operation not allowed on Stream File */
 #define ErcBlockFile	 215	/* Operation not allowed on Block File */
 #define ErcBeyondEOF	 217	/* SetLFA or Read/WriteBlock beyond EOF */
@@ -211,12 +211,12 @@ extern long xprintf(char *fmt, ...);
 #define ErcNoMatch       224	/* No matching directory entry */
 
 #define ErcWriteOnly	 225	/* Attempt to read write-only device */
-#define ErcDupName	 226	/* Name exists as a file or dir already */
+#define ErcDupName		 226	/* Name exists as a file or dir already */
 #define ErcNotSupported	 227	/* Not supported on this file  */
-#define ErcRootFull	 228	/* The Root Directory is Full  */
-#define ErcDiskFull	 230	/* No more free CLUSTERS!!!  */
+#define ErcRootFull		 228	/* The Root Directory is Full  */
+#define ErcDiskFull		 230	/* No more free CLUSTERS!!!  */
 
-#define ErcNewMedia	 605	/* for floppy mounting from FDD */
+#define ErcNewMedia		 605	/* for floppy mounting from FDD */
 
 /****************  FAT Filesystem Type Codes   **********************/
 #define FAT12	0x01
@@ -248,12 +248,12 @@ extern long xprintf(char *fmt, ...);
 #define nFATBufs 17		/* 1 Static for floppies + 16 * 512 = 8192, 2 pages */
 
 static struct fattype {		/* */
-	U8  *pBuf;		/* points to beginning of fat buffer  */
+	U8  *pBuf;			/* points to beginning of fat buffer  */
 	U32 LastUsed;		/* Tick when last used (0 = Never) */
 	U32 LBASect;		/* LBA of first FAT sect in buf (where it came from) */
 	U16 iClstrStart;	/* Starting cluster for each buf  */
 	U16 iClstrStartHi;	/* FAT32 has bigger clusters */
-	U8  Drive;		/* LDrive this FAT sector is from */
+	U8  Drive;			/* LDrive this FAT sector is from */
 	U8  fModLock;		/* Bit 0 = Modified, bit 1 = Locked  */
 	};
 
@@ -280,18 +280,18 @@ U8 FatBufA[1536];  /* floppy fat buffer */
 static struct FCB {
 	S8  Name[8];		/* From here to Filesize is copy of DirEnt */
 	S8  Ext[3];
-	S8  Attr;		/* from MS-DOS */
+	S8  Attr;			/* from MS-DOS */
 	U8  Resvd1[10];		/* ????????  */
-	U16 Time;		/* Only changed when created or updated */
+	U16 Time;			/* Only changed when created or updated */
 	U16 Date;
 	U16 StartClstr;		/* At least one per file!! */
 	U32 FileSize;		/* last entry in FAT Dir Ent (32 bytes) */
 	U32 LBADirSect;		/* LBA of directory sector this is from */
 	U16 oSectDirEnt;	/* Offset in sector for the dir entry */
-	U8  Ldrv;		/* Logical drive this is on (A-J, 0-9) */
-	U8  Mode;		/* 0 or 1 (Read or Modify). */
-	U8  nUsers;		/* Active FUBs for this file (255 MAX). 0= Free FCB */
-	U8  fMod;		/* This file was modified! */
+	U8  Ldrv;			/* Logical drive this is on (A-J, 0-9) */
+	U8  Mode;			/* 0 or 1 (Read or Modify). */
+	U8  nUsers;			/* Active FUBs for this file (255 MAX). 0= Free FCB */
+	U8  fMod;			/* This file was modified! */
 /*	U8  Resvd[22];		** Out to 64 bytes */
 	U16 StartClstrHi;	/* For FAT32 */
 	U8  Resvd[20];		/* Out to 64 bytes */
@@ -327,17 +327,17 @@ static struct FCB *pFCB;	/* pointer to one FCB */
 struct FUB {
 	U16 Job;		/* User's Job Number. 0 if FUB is free. */
 	U16 iFCB;		/* FCB number for this file (0 to nFCBs-1) */
-	U32 CrntLFA;		/* Current Logical File Address (File Ptr) */
+	U32 CrntLFA;	/* Current Logical File Address (File Ptr) */
 	U8  *pBuf;		/* Ptr to buffer if stream mode */
 	U32 sBuf;		/* Size of buffer for Stream file in bytes */
 	U32	LFABuf;		/* S-First LFA in Clstr Buffer */
-	U32 LFAClstr;		/* LFA of Clstr (below). */
+	U32 LFAClstr;	/* LFA of Clstr (below). */
 	U16 Clstr;		/* Last Cluster read */
-	U8  fModified;		/* Data in buffer was modified */
-	U8  fStream;		/* NonZero for STREAM mode */
-/*	U8  Rsvd[4];		** Pad to 32 bytes */
-	U16 ClstrHi;		/* For FAT32 */
-	U8  Rsvd[2];		/* Pad to 32 bytes */
+	U8  fModified;	/* Data in buffer was modified */
+	U8  fStream;	/* NonZero for STREAM mode */
+/*	U8  Rsvd[4];	** Pad to 32 bytes */
+	U16 ClstrHi;	/* For FAT32 */
+	U8  Rsvd[2];	/* Pad to 32 bytes */
 	};
 
 static struct FUB *paFUB;	/* a pointer to allocated FUBs. Set up at init. */
@@ -364,7 +364,7 @@ struct fsbtype {
 	  U8  BootSig;
 	  U32 VolID;
 	  U8  VolLabel[11];
-	  U8  FileSysType[8];		/* 62 bytes */
+	  U8  FileSysType[8];	/* 62 bytes */
 	  };
 /*static struct fsbtype  fsb;*/
 
@@ -438,7 +438,7 @@ struct dirstruct {
 	U8  Ext[3];
 	U8  Attr;
 /*	U8  Rsvd[10];*/
-	U8  NTRsvd;		/* Break out the Rsvd block for FAT32 */
+	U8  NTRsvd;			/* Break out the Rsvd block for FAT32 */
 	U8  CrtTimeTenth;	/* Creation time 2 second granularity */
 	U16 CrtTime;		/* Creation time */
 	U16 CrtDate;		/* Creation date */
@@ -483,12 +483,12 @@ struct longdirstruct {
    name goes.
 */
 
-static U8 FDrive			/* Drive parsed from file operation */
+static U8 FDrive				/* Drive parsed from file operation */
 static U8 FileSpec[7][11];		/* Hierarchy from file spec parsing */
 static U8 SpecDepth;			/* Depth of parse (0=Root File) */
 
 /* Used for Rename */
-static U8 FDrive1			/* Drive parsed from file operation */
+static U8 FDrive1				/* Drive parsed from file operation */
 static U8 FileSpec1[7][11];		/* Hierarchy from file spec parsing */
 static U8 SpecDepth1;			/* Depth of parse (0=Root File) */
 
@@ -505,7 +505,7 @@ static U8  abDirSectBuf[516];
 static struct phydrv {
 	U32 nHeads;     	/* heads per drives   */
 	U32 nSecPerTrk; 	/* Sectors per track  */
-	U16 BS1Cyl;		/* Cyl of 1st boot sector on disk */
+	U16 BS1Cyl;			/* Cyl of 1st boot sector on disk */
 	U8  BS1Head;		/* Head of 1st boot sector on disk */
 	U8  BS1Sect;		/* Sector of 1st boot sector on disk */
 	}
@@ -517,20 +517,20 @@ static struct phydrv  PDrvs[nPDrvs];
 #define nLDrvs 18
 
 static struct ldrvtype {
-	U32 LBA0;		/* lba for Start of LDrive (bootSect) */
+	U32 LBA0;			/* lba for Start of LDrive (bootSect) */
 	U32 LBAData;		/* lba for Start of Data Area */
-	U32 LBAMax;		/* Max lba for logical drive */
+	U32 LBAMax;			/* Max lba for logical drive */
 	U32 LBARoot;		/* lba of the Root directory */
-	U32 LBAFAT;		/* lba of first FAT */
+	U32 LBAFAT;			/* lba of first FAT */
 	U16 nHeads;     	/* Setup after boot sector is read */
 	U16 nSecPerTrk; 	/* Setup after boot sector is read */
 	U16 nRootDirEnt;	/* Number of Root directory entries */
-/*	U16 sFAT;		** nSectors in a FAT */
-	U32 sFAT;		/* nSectors in a FAT */
-	U8  DevNum;		/* Device Number for this ldrv FF = NONE */
+/*	U16 sFAT;			** nSectors in a FAT */
+	U32 sFAT;			/* nSectors in a FAT */
+	U8  DevNum;			/* Device Number for this ldrv FF = NONE */
 	U8  SecPerClstr;	/* For each logical drive */
-	U8  nFATS;		/* number of FATs */
-	U8  fFAT16;		/** FAT12=0, FAT16=1, FAT32=2 */
+	U8  nFATS;			/* number of FATs */
+	U8  fFAT16;			/** FAT12=0, FAT16=1, FAT32=2 */
 	U32 MaxClust;		/* To speed up, this is compared a lot */
 	};
 
@@ -546,10 +546,10 @@ struct hddevtype{
   U8  fNewMedia;
   U8  type_now;		/* current fdisk_table for drive selected */
   U8  resvd0[2];	/* padding for DWord align  */
-  U32 nCyl;		/* total physical cylinders (we really don't care) */
+  U32 nCyl;			/* total physical cylinders (we really don't care) */
   U32 nHead;		/* total heads on device    */
   U32 nSectors;		/* Sectors per track        */
-  U32 nBPS;		/* Number of bytes per sect.  32 bytes out to here.*/
+  U32 nBPS;			/* Number of bytes per sect.  32 bytes out to here.*/
   U32 LastRecalErc0;
   U32 LastSeekErc0;
   U8  LastStatByte0;
@@ -560,7 +560,7 @@ struct hddevtype{
   U32 LastSeekErc1;
   U8  LastStatByte1;
   U8  LastErcByte1;
-  U8  ResetStatByte;	/* Status Byte immediately after RESET */
+  U8  ResetStatByte;/* Status Byte immediately after RESET */
   U8  filler1;
   U32 resvd1[2];	/* out to 64 bytes */
   };
@@ -571,16 +571,16 @@ static struct hddevtype   HDDevStat[4];
    It is peculiar to the FD Drvr */
 
 struct fdstattype{
-  U32 erc;		/* Last Error from device */
+  U32 erc;			/* Last Error from device */
   U32 blocks_done;
   U32 BlocksMax;
   U8 fNewMedia;
   U8 type_now;		/* current fdisk_table for drive selected */
   U8 resvd1[2];		/* padding for DWord align  */
-  U32 nCyl;		/* total physical cylinders */
+  U32 nCyl;			/* total physical cylinders */
   U32 nHead;		/* total heads on device    */
   U32 nSectors;		/* Sectors per track        */
-  U32 nBPS;		/* Number of bytes per sect */
+  U32 nBPS;			/* Number of bytes per sect */
   U8 params[16]; 	/* begin device specific fields */
   U8 STATUS[8];		/* status returned from FDC (for user status) */
   U32 resvd3;
@@ -890,7 +890,7 @@ for (j=2; j<nPDrvs; j++)
 	}
 }
  if (ercD[0]) 
-	return ercD[0];				/* there may be no Device 13 */
+	return ercD[0];			/* there may be no Device 13 */
  else 
 	return 0;
 }
@@ -933,7 +933,7 @@ struct fsb32type *fsb32;
 if (Ldrv[i].DevNum != 0xff)
 {
 
-    j = Ldrv[i].DevNum;			/* j is MMURTL Device number */
+	j = Ldrv[i].DevNum;			/* j is MMURTL Device number */
 
 	erc = DeviceOp(j, 1, Ldrv[i].LBA0, 1, abRawSector);
 
@@ -952,44 +952,44 @@ if (Ldrv[i].DevNum != 0xff)
 		fsb32 = &bsbuff;
 	}
 
-    if (erc==0) 
-    {
-	if(Ldrv[i].fFAT16 < 2)
+	if (erc==0) 
 	{
-		Ldrv[i].LBARoot     = fsb->ResSectors + Ldrv[i].LBA0 +
-							 (fsb->FATs * fsb->SecPerFAT);
-		Ldrv[i].nRootDirEnt = fsb->RootDirEnts;	/* n Root dir entries */
-		Ldrv[i].SecPerClstr = fsb->SecPerClstr;
-		Ldrv[i].nHeads      = fsb->Heads;
-		Ldrv[i].nSecPerTrk  = fsb->SecPerTrack;
-		Ldrv[i].sFAT        = fsb->SecPerFAT;	/* nSectors in a FAT */
-		Ldrv[i].nFATS       = fsb->FATs;		/* number of FATs */
-		Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb->ResSectors;
-		Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb->RootDirEnts / 16);
-/*	   if (fsb.FileSysType[4] == '2')
-         Ldrv[i].fFAT16 = 0;
-*/
-	}
-	else
-	{
-		Ldrv[i].LBARoot     = fsb32->ResSectors + Ldrv[i].LBA0 +
-							 (fsb32->FATs * fsb32->SecPerFAT);
-	/*       Ldrv[i].nRootDirEnt = fsb32->RootDirEnts;	** n Root dir entries */
-		Ldrv[i].nRootDirEnt = 0xFFFF;	/* FAT32 is 0 */
-		Ldrv[i].SecPerClstr = fsb32->SecPerClstr;
-		Ldrv[i].nHeads      = fsb32->Heads;
-		Ldrv[i].nSecPerTrk  = fsb32->SecPerTrack;
-		Ldrv[i].sFAT        = fsb32->SecPerFAT;	/* nSectors in a FAT */
-		Ldrv[i].nFATS       = fsb32->FATs;	/* number of FATs */
-		Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb32->ResSectors;
-		Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb32->RootDirEnts / 16);
-/*	   if (fsb.FileSysType[4] == '2')
-         Ldrv[i].fFAT16 = 0;
-*/
-	}
-/*	xprintf("%d %d %d %d %d %d %d %d %d %d", i, Ldrv[i].LBARoot, Ldrv[i].nRootDirEnt,
-		Ldrv[i].SecPerClstr, Ldrv[i].nHeads, Ldrv[i].nSecPerTrk, Ldrv[i].sFAT,
-		Ldrv[i].nFATS, Ldrv[i].LBAFAT, Ldrv[i].LBAData);	*/
+		if(Ldrv[i].fFAT16 < 2)
+		{
+			Ldrv[i].LBARoot     = fsb->ResSectors + Ldrv[i].LBA0 +
+								(fsb->FATs * fsb->SecPerFAT);
+			Ldrv[i].nRootDirEnt = fsb->RootDirEnts;	/* n Root dir entries */
+			Ldrv[i].SecPerClstr = fsb->SecPerClstr;
+			Ldrv[i].nHeads      = fsb->Heads;
+			Ldrv[i].nSecPerTrk  = fsb->SecPerTrack;
+			Ldrv[i].sFAT        = fsb->SecPerFAT;	/* nSectors in a FAT */
+			Ldrv[i].nFATS       = fsb->FATs;		/* number of FATs */
+			Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb->ResSectors;
+			Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb->RootDirEnts / 16);
+	/*	   if (fsb.FileSysType[4] == '2')
+			Ldrv[i].fFAT16 = 0;
+	*/
+		}
+		else
+		{
+			Ldrv[i].LBARoot     = fsb32->ResSectors + Ldrv[i].LBA0 +
+								(fsb32->FATs * fsb32->SecPerFAT);
+		/*       Ldrv[i].nRootDirEnt = fsb32->RootDirEnts;	** n Root dir entries */
+			Ldrv[i].nRootDirEnt = 0xFFFF;	/* FAT32 is 0 */
+			Ldrv[i].SecPerClstr = fsb32->SecPerClstr;
+			Ldrv[i].nHeads      = fsb32->Heads;
+			Ldrv[i].nSecPerTrk  = fsb32->SecPerTrack;
+			Ldrv[i].sFAT        = fsb32->SecPerFAT;	/* nSectors in a FAT */
+			Ldrv[i].nFATS       = fsb32->FATs;	/* number of FATs */
+			Ldrv[i].LBAFAT      = Ldrv[i].LBA0 + fsb32->ResSectors;
+			Ldrv[i].LBAData     = Ldrv[i].LBARoot + (fsb32->RootDirEnts / 16);
+	/*	   if (fsb.FileSysType[4] == '2')
+			Ldrv[i].fFAT16 = 0;
+	*/
+		}
+	/*	xprintf("%d %d %d %d %d %d %d %d %d %d", i, Ldrv[i].LBARoot, Ldrv[i].nRootDirEnt,
+			Ldrv[i].SecPerClstr, Ldrv[i].nHeads, Ldrv[i].nSecPerTrk, Ldrv[i].sFAT,
+			Ldrv[i].nFATS, Ldrv[i].LBAFAT, Ldrv[i].LBAData);	*/
     } /* if erc */
 /*	xprintf("%d erc is %d\r\n", i, erc);*/
 } /* if valid logical device */
