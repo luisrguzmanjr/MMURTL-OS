@@ -82,7 +82,7 @@ long JobNum;
 #define NCMDS 16
 
 char paCmds[NCMDS+1][10] = {
-	"",					/* 0 external */
+    "",                 /* 0 external */
 	"xxxxx",			/* 1 - not used */
 	"Cls",				/* 2  */
 	"Copy",				/* 3  */
@@ -186,7 +186,7 @@ void StatTask(void)
 
 		PutVidChars(0,0, aStatLine, 80, STATVID);
 
-		Sleep(100);	/* sleep 1 second */
+        Sleep(100);      /* sleep 1 second */
 	} /* forEVER */
 }
 
@@ -261,7 +261,7 @@ void InitScreen(int fNew)
 		ClrScr();
 	}
 	SetXY(iCol, iLine);
-    PutVidChars(0,0, aStatLine, 80, STATVID);
+        PutVidChars(0,0, aStatLine, 80, STATVID);
 	return;
 }
 
@@ -329,6 +329,7 @@ if ((apParam[1]) && (acbParam[1]))
 {
 	if (iLine >= 23) 
 	{
+        InitScreen(FALSE);
 		ScrollVid(0,1,80,23,1);
 		SetXY(0,23);
 	}
@@ -371,6 +372,7 @@ if ((pName) && (cbName))
 
 	if (iLine >= 23)
 	{
+        InitScreen(FALSE);
 		ScrollVid(0,1,80,23,1);
 		SetXY(0,23);
 	}
@@ -536,8 +538,9 @@ char st[78];
 
 if (iLine >= 23)
 {
-	ScrollVid(0,1,80,23,1);
-	SetXY(0,23);
+        InitScreen(FALSE);
+		ScrollVid(0,1,80,23,1);
+        SetXY(0,23);
 }
 fDone = 0;
 SectNum = 0;
@@ -830,7 +833,10 @@ unsigned long erc, i, j, fh;
 		FillData(aCmd, 79, ' ');
 		aCmd[79] = 0;
 		cbCmd = 0;
-		SetXY(0, iLine);
+		if (iLine >= 23)
+			SetXY(0, iLine - 1);
+		else
+			SetXY(0, iLine);
 		TTYOut (">", 1, NORMVID);
 		EditLine(aCmd, cbCmd, 79, &cbCmd, &ExitChar, EDVID);
 		TTYOut ("\r\n", 2, NORMVID);
@@ -838,7 +844,7 @@ unsigned long erc, i, j, fh;
 
 		acbParam[0] = 0;
 		apParam[0] = 0;
-        CmdNum = 0;
+                CmdNum = 0;
 
 		if (ExitChar == 0x0d)
 			ParseCmdLine();			/* set up all params */
@@ -853,8 +859,8 @@ unsigned long erc, i, j, fh;
 				if ((acbParam[0] == j) &&
 					(CompareNCS(apParam[0],	paCmds[i], j) == -1))
 				{
-	                CmdNum = i;
-	                break;
+                                        CmdNum = i;
+                                        break;
 				}
 				i++;
 			}
@@ -944,6 +950,7 @@ unsigned long erc, i, j, fh;
 		GetXY(&iCol, &iLine);
 		if (iLine >= 23)
 		{
+			InitScreen(FALSE);
 			ScrollVid(0,1,80,23,1);
 			SetXY(0,23);
 		}

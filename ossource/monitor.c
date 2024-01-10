@@ -45,14 +45,14 @@
 #define ErcNoDevice 504
 
 static char rgStatLine[] =
-"mm/dd/yy  00:00:00              MMURTL Monitor                   Tick:0         ";
+"mm/dd/yy  00:00:00              Juju's Monitor                   Tick:0         ";
 
-static char rgMonMenu1[] = "LdCLI\xb3Jobs  \xb3Stats \xb3      ";
+static char rgMonMenu1[] = "LdCLI\xb3Jobs  \xb3Stats \xb3Init  ";
 static char rgMonMenu2[] = "     \xb3      \xb3      \xb3Reboot";
 static char rgMonMenu3[] = "     \xb3Debug \xb3      \xb3     ";
 
-static char rgCPR1[] ="MMURTL (tm) - Message based, MUltitasking, Real-Time kerneL";
-static char rgCPR2[] ="Copyright (c) R.A. Burgess, 1990-1993, All Rights Reserved";
+static char rgCPR1[] ="Juju (tm) - wants to know what you want with her computer!";
+static char rgCPR2[] ="Copyright (c) L.R. Guzman, 2011-present, All Rights Reserved";
 
 static char *CRLF = "\r\n\r\n";
 
@@ -136,12 +136,12 @@ extern unsigned long BootDrive;
 /*============ protos (NEAR MMURTL support calls) =================*/
 
 extern long InitKBDService(void);	/* From Keyboard.asm */
-extern long mouse_setup(void);		/* From mouse.c */
+/* extern long mouse_setup(void); */    /* From mouse.c */
 extern long fdisk_setup(void);		/* From Floppy.c */
 extern long hdisk_setup(void);		/* From HardIDE.c */
 extern long coms_setup(void);		/* From RS232.c */
 extern long lpt_setup(void);		/* From Parallel.c */
-extern long InitFS(void);			/* From Fsys.c */
+extern long InitFS(void);           /* From Fsys.c */
 
 extern long GetExchOwner(long Exch, char *pJCBRet);
 extern long DeAllocJCB(long *pdJobNumRet, char *ppJCBRet);
@@ -366,12 +366,17 @@ long xsprintf(char *s, char *fmt, ...)
 
 void CheckScreen()
 {
-long iCol, iLine;
+        long iCol, iLine;
 
 	GetXY(&iCol, &iLine);
-	if (iLine >= 23)
+    if (iLine >= 23)
 	{
 		ScrollVid(0,1,80,23,1);
+		xsprintf(&rgStatLine[70], "%d", tick);
+		PutVidChars(0,   0, rgStatLine, 80, WHITE|BGBLUE);
+		PutVidChars(0,  24, rgMonMenu1, 26, BLUE|BGWHITE);
+		PutVidChars(27, 24, rgMonMenu2, 26, BLUE|BGWHITE);
+		PutVidChars(54, 24, rgMonMenu3, 25, BLUE|BGWHITE);
 		SetXY(0,22);
 	}
 }
@@ -783,8 +788,8 @@ if (erc)
   xprintf("AllocExch (Kill Exch) Error: %d\r\n", erc);
 
 Color = YELLOW|BGBLACK;
-xprintf("MMURTL (tm) - Message based, MUltitasking, Real-Time kerneL\r\n");
-xprintf("Copyright (c) R.A.Burgess, 1991-1995  ALL RIGHTS RESERVED\r\n\r\n");
+xprintf("Juju (tm) - wants to know what you want with her computer!\r\n");
+xprintf("Copyright (c) L.R.Guzman, 2011-present ALL RIGHTS RESERVED\r\n\r\n");
 
 Color = WHITE|BGBLACK;
 
@@ -828,10 +833,13 @@ xprintf("%d\r\n", erc);
 xprintf("Initializing file system...\r\n");
 erc = InitFS();
 xprintf("File System... Error: %d\r\n", erc);
+CheckScreen();
 
+/*
 xprintf("Initializing mouse...\r\n");
 erc = mouse_setup();
 xprintf("mouse... Error: %d\r\n", erc);
+*/
 
 /* Spawn manager task */
 
@@ -937,7 +945,20 @@ for (;;)  /* Loop forEVER looking for user desires */
 			Sleep(3);	/* Sleep for 30 ms */
 			break;
 	case 0x12:		/* F4 - future use */
-	case 0x13:		/* F5  */
+			InitScreen();
+			Color = YELLOW|BGBLACK;
+            xprintf("Juju (tm) - wants to know what you want with her computer!\r\n");
+            xprintf("Copyright (c) L.R.Guzman, 2011-present ALL RIGHTS RESERVED\r\n\r\n");
+			Color = WHITE|BGBLACK;
+            c = ((BootDrive & 0x7f) + 0x41);
+            xprintf("BootDrive: %c\r\n", c);
+            i = (oMemMax+1)/1024;
+            xprintf("Total memory (Kb): %d\r\n", i);
+            erc = QueryPages(&nMemPages);
+            i = (nMemPages*4096)/1024;
+            xprintf("Free memory  (Kb): %d\r\n", i);
+            break;
+    case 0x13:      /* F5  */
 	case 0x14:		/* F6  */
 	case 0x15:		/* F7  */
 	case 0x17:		/* F9  */
@@ -952,19 +973,11 @@ for (;;)  /* Loop forEVER looking for user desires */
 					TTYOut (CRLF, 2, WHITE|BGBLACK);
 				else
 					TTYOut (&c, 1, WHITE|BGBLACK);
-		   }
+                }
 	}
-
-	GetXY(&iCol, &iLine);
-	if (iLine >= 23)
-	{
-		ScrollVid(0,1,80,23,1);
-		SetXY(0,22);
-	}
-
+    CheckScreen();
 } /* for EVER */
 
 }
-
 
 /*===========  THE END  =========================================*/

@@ -178,7 +178,7 @@ extern far U32 GetPath(long JobNum, char *pPathRet, long *pdcbPathRet);
 extern far U32 RegisterSvc(S8 *pName, U32 Exch);
 
 /* NEAR support for debugging */
-
+extern long CheckScreen(void);
 extern long xprintf(char *fmt, ...);
 /* extern U32 Dump(unsigned char *pb, long cb); */
 
@@ -738,34 +738,42 @@ U8 validFAT(U8 check)
 	switch(check) {
 		case FAT12:
 				xprintf("Found FAT12 Partition\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case FAT16:
 				xprintf("Found FAT16 Partition\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case FAT16B:
 				xprintf("Found FAT16B Partition\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case FAT32:
 				xprintf("Found FAT32 Partition, limited support\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case FAT32L:
 				xprintf("Found FAT32L Partition, limited support\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case FAT16L:
 				xprintf("Found FAT16L Partition\n\r");
+				CheckScreen();
 				return 1;
 				break;
 		case EXTPL:
 				xprintf("Found EXTPL Partition, not supported\n\r");
+				CheckScreen();
 				return 0;
 				break;
 		case EXTP:
 				xprintf("Found EXTP Partition, not supported\n\r");
+				CheckScreen();
 				return 0;
 				break;
 		default:
@@ -4341,8 +4349,7 @@ U8 Drive;
 static U32 RenameFileM(char *pCrntName, long dcbCrntName,
                 char *pNewName, long dcbNewName, U32 iJob)
 {
-U32 dHandle, erc, erc1, iFCB;
-
+U32 dHandle, erc, erc1, iFCB;      
 	erc = OpenFileM(pCrntName, dcbCrntName, 1, 0, &dHandle, iJob);
 	if (!erc) 
 	{
@@ -4378,7 +4385,8 @@ U32 dHandle, erc, erc1, iFCB;
 static U32	CreateDirM(char *pPath, long cbPath, long iJob)
 {
 long erc;
-
+  xprintf("in createdir, call create file\r\n");
+  CheckScreen();
   erc = CreateFileM(pPath, cbPath, DIRECTORY, iJob);
   return(erc);
 
@@ -4388,12 +4396,19 @@ long erc;
  This is Delete Directory for the MMURTL FAT file system.
 ********************************************************/
 
-static U32	DeleteDirM(char *pPath, long cbPath, long fAllFiles, long iJob)
+static U32 DeleteDirM(char *pPath, long cbPath, long iJob)
 {
+	long erc;
+	xprintf("in deletedir, call create file\r\n");
+	CheckScreen();
+	erc = CreateFileM(pPath, cbPath, DIRECTORY, iJob);
+	return(erc);
+/*
 	pPath = 0;
 	cbPath = 0;
 	fAllFiles = 0;
 	iJob = 0;
+*/
 }
 
 /*******************************************************
@@ -4484,10 +4499,12 @@ while (1)
 			                   pRQB->dData1);    	/*  dSize */
 			break;
 		case 11 :		/* CreateFile */
+			xprintf("in fsystask, call create file\r\n");
+			CheckScreen();
 			erc = CreateFileM(pRQB->pData1,      	/* pFilename  */
-			                  pRQB->cbData1,     	/* cbFilename */
-			                  pRQB->dData0,      	/* Attributes */
-					  pRQB->RqOwnerJob); 	/* iJob Owner */
+							  pRQB->cbData1,     	/* cbFilename */
+							  pRQB->dData0,      	/* Attributes */
+							  pRQB->RqOwnerJob); 	/* iJob Owner */
 			break;
 		case 12 :		/* RenameFile */
 			erc = RenameFileM(pRQB->pData1,      	/* pCrntName  */
@@ -4500,15 +4517,19 @@ while (1)
 			erc = DeleteFileM(pRQB->dData0);     	/* Handle  */
 			break;
 		case 14 :		/* CreateDirectory */
+			xprintf("in fsystask, call create dir\r\n");
+			CheckScreen();
 			erc = CreateDirM(pRQB->pData1,      	/* pPath */
-			                 pRQB->cbData1,     	/* cbPath */
-			                 pRQB->RqOwnerJob); 	/* JobNum */
+							 pRQB->cbData1,     	/* cbPath */
+							 pRQB->RqOwnerJob); 	/* JobNum */
 			break;
 		case 15 :		/* DeleteDirectory */
+			xprintf("in fsystask, call delete dir\r\n");
+			CheckScreen();
 			erc = DeleteDirM(pRQB->pData1,      	/* pPath */
-			                 pRQB->cbData1,     	/* cbPath */
-			                 pRQB->dData0,      	/* fAllFiles */
-			                 pRQB->RqOwnerJob); 	/* JobNum */
+							 pRQB->cbData1,     	/* cbPath */
+							/* pRQB->dData0, */        /* fAllFiles */ 
+							 pRQB->RqOwnerJob); 	/* JobNum */
 			break;
 		case 16 :		/* GetDirSector */
 			erc = GetDirSectorM(pRQB->pData1,      	/* pPath    */
@@ -4868,28 +4889,36 @@ U32 far _CreateDir(char *pPath,
 {
 long erc, exch, rqhndl, msg[2];
 	GetTSSExch(&exch);
-    erc = Request(fsysname, 14, exch, &rqhndl,
+        xprintf("make request to create dir\r\n");
+        CheckScreen();
+        erc = Request(fsysname, 14, exch, &rqhndl,
                    1,  				/* 1 Send ptrs */
                    pPath, cbPath,
                    0, 0,
                    0, 0, 0);
-	if (!erc) erc = WaitMsg(exch, msg);
+        xprintf("request made, check error\r\n");
+        CheckScreen();
+        if (!erc) erc = WaitMsg(exch, msg);
 	if (erc) return(erc);
 	return(msg[1]);
 }
 
 /*************************************/
 U32 far _DeleteDir(char *pPath,
-				   long cbPath,
-				   long fAllFiles)
+                   long cbPath) /* ,
+                   long fAllFiles) */
 {
 long erc, exch, rqhndl, msg[2];
 	GetTSSExch(&exch);
-    erc = Request(fsysname, 15, exch, &rqhndl,
+        xprintf("make request to delete dir\r\n");
+        CheckScreen();
+        erc = Request(fsysname, 15, exch, &rqhndl,
                    1,  				/* 1 Send ptrs */
                    pPath, cbPath,
                    0, 0,
-                   fAllFiles, 0, 0);
+                   0, 0, 0);
+        xprintf("request made, check error\r\n");
+        CheckScreen();
 	if (!erc) erc = WaitMsg(exch, msg);
 	if (erc) return(erc);
 	return(msg[1]);
@@ -4979,7 +5008,7 @@ U8 counter;
 	  			i,
 	  			PDrvs[i].nHeads,
 	  			PDrvs[i].nSecPerTrk);
-
+      CheckScreen();
   	}
 
 	if (!erc)
@@ -5016,6 +5045,7 @@ U8 counter;
   			Ldrv[i].SecPerClstr,
   			Ldrv[i].DevNum,
   			j);
+    	CheckScreen();
   	}
 
 
