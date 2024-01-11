@@ -869,7 +869,7 @@ for (j=2; j<nPDrvs; j++)
 			Ldrv[i].LBAMax =partab[counter].nSectorsTotal;	/* Max lba for logical drive */
 			if ((partab[counter].FATType == FAT16) || (partab[counter].FATType == FAT16B))	
 			{
-					Ldrv[i].fFAT16 = 1;
+				Ldrv[i].fFAT16 = 1;
 				Ldrv[i].MaxClust = 0x0000fff8;
 			}
 			else if ((partab[counter].FATType == FAT32) || (partab[counter].FATType == FAT32L))
@@ -4916,7 +4916,7 @@ long erc, exch, rqhndl, msg[2];
                    1,  				/* 1 Send ptrs */
                    pPath, cbPath,
                    0, 0,
-                   0, 0, 0);
+                   fAllFiles, 0, 0);
         xprintf("request made, check error\r\n");
         CheckScreen();
 	if (!erc) erc = WaitMsg(exch, msg);
