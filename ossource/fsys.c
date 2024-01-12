@@ -4898,7 +4898,7 @@ long erc, exch, rqhndl, msg[2];
                    0, 0, 0);
         xprintf("request made, check error\r\n");
         CheckScreen();
-        if (!erc) erc = WaitMsg(exch, msg);
+    if (!erc) erc = WaitMsg(exch, msg);
 	if (erc) return(erc);
 	return(msg[1]);
 }
